@@ -25,9 +25,8 @@ public class VideoController {
         videoService.uploadVideo(file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @DeleteMapping("{videoId}")
-
-
     ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
 
         //videoService.deleteVideo(videoId);
