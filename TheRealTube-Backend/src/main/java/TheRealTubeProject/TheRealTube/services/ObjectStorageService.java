@@ -12,4 +12,6 @@ public interface ObjectStorageService {
     String createObjectKey(String fileName);
 
     URL getFileUrl(String objectKey);
+
+    void deleteVideo(Long videoId);
 }

@@ -29,7 +29,7 @@ public class VideoController {
     @DeleteMapping("{videoId}")
     ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
 
-        //videoService.deleteVideo(videoId);
+        videoService.deleteVideo(videoId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

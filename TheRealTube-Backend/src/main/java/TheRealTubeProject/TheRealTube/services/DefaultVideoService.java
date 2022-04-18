@@ -2,6 +2,7 @@ package TheRealTubeProject.TheRealTube.services;
 
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,8 +25,11 @@ public class DefaultVideoService implements VideoService {
     public String uploadVideo(MultipartFile file) {
         Video newVideo = new Video();
         newVideo.setName(file.getOriginalFilename());
+        String objectKey = objectStorageService.uploadToObjectStorage(file);
+        newVideo.setFileurl(objectStorageService.getFileUrl(objectKey));
+        newVideo.setObjectKey(objectKey);
         videoRepository.save(newVideo);
-       return objectStorageService.uploadToObjectStorage(file);
+       return objectKey;
     }
 
     @Override
@@ -36,5 +40,10 @@ public class DefaultVideoService implements VideoService {
     @Override
     public List<Video> getAllVideos() {
         return videoRepository.findAll();
+    }
+
+    @Override
+    public void deleteVideo(Long videoId) {
+        objectStorageService.deleteVideo(videoId);
     }
 }
