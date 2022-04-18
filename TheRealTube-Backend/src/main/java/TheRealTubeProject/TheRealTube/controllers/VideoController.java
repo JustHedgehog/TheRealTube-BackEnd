@@ -41,11 +41,11 @@ public class VideoController {
     }
 
     @GetMapping("video/{videoId}")
-    ResponseEntity<Video> getAllVideos((@PathVariable("videoId") Long videoId){
+    ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId){
 
         Video video = videoService.getVideo(videoId);
 
-        return new ResponseEntity<>(videoList ,HttpStatus.OK);
+        return new ResponseEntity<>(video ,HttpStatus.OK);
     }
 
     @GetMapping("userIdPlaceholder/video")
