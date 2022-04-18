@@ -9,7 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RestController("video/")
+@RestController
+@RequestMapping("/api/video/")
 public class VideoController {
 
     private final VideoService videoService;
@@ -24,7 +25,7 @@ public class VideoController {
         videoService.uploadVideo(file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @DeleteMapping("video/{videoId}")
+    @DeleteMapping("{videoId}")
     ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
 
         //videoService.deleteVideo(videoId);
@@ -32,7 +33,7 @@ public class VideoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("video")
+    @GetMapping
     ResponseEntity<List<Video>> getAllVideos(){
 
         List<Video> videoList = videoService.getAllVideos();
@@ -40,7 +41,7 @@ public class VideoController {
         return new ResponseEntity<>(videoList ,HttpStatus.OK);
     }
 
-    @GetMapping("video/{videoId}")
+    @GetMapping("{videoId}")
     ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId){
 
         Video video = videoService.getVideo(videoId);
