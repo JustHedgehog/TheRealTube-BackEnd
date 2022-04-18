@@ -20,12 +20,14 @@ public class VideoController {
     }
 
 
-    @PostMapping(value = "userIdPlaceholder/{videoId}",headers=("content-type=multipart/*"))
+    @PostMapping(value = "userIdPlaceholder",headers=("content-type=multipart/*"))
     ResponseEntity<String> addVideo(@RequestPart(value = "file") MultipartFile file){
         videoService.uploadVideo(file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @DeleteMapping("{videoId}")
+
+
     ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
 
         //videoService.deleteVideo(videoId);
