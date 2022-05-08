@@ -1,5 +1,7 @@
 package TheRealTubeProject.TheRealTube.configs;
 
+import TheRealTubeProject.TheRealTube.security.jwt.AuthEntryPointJwt;
+import TheRealTubeProject.TheRealTube.security.jwt.AuthTokenFilter;
 import TheRealTubeProject.TheRealTube.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,2 +1,4 @@
-package TheRealTubeProject.TheRealTube.controllers;public class AuthController {
+package TheRealTubeProject.TheRealTube.controllers;
+
+public class AuthController {
 }
