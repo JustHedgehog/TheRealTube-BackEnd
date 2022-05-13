@@ -4,6 +4,7 @@ import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,12 +22,14 @@ public class VideoController {
 
 
     @PostMapping(value = "userIdPlaceholder",headers=("content-type=multipart/*"))
+    @PreAuthorize("hasRole('User')")
     ResponseEntity<String> addVideo(@RequestPart(value = "file") MultipartFile file){
         videoService.uploadVideo(file);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("{videoId}")
+    @PreAuthorize("hasRole('User')")
     ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
 
         videoService.deleteVideo(videoId);
