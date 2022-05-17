@@ -20,14 +20,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, min = 3)
     private String username;
     @NotBlank
     @Size(max = 50)
     @Email
     private String email;
     @NotBlank
-    @Size(max = 120)
+    @Size(max = 120, min = 6)
     private String password;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
