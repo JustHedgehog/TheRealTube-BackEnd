@@ -1,5 +1,8 @@
 package TheRealTubeProject.TheRealTube.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +10,7 @@ import javax.persistence.Id;
 import java.net.URL;
 
 @Entity
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class Video {
 
     @Id
