@@ -1,4 +1,4 @@
-package TheRealTubeProject.TheRealTube.models;
+package TheRealTubeProject.TheRealTube.payload.response;
 
 import lombok.Data;
 

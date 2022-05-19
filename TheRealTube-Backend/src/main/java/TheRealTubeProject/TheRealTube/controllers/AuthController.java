@@ -6,7 +6,6 @@ import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.payload.request.LoginRequest;
 import TheRealTubeProject.TheRealTube.payload.request.SignupRequest;
 import TheRealTubeProject.TheRealTube.payload.response.JwtResponse;
-import TheRealTubeProject.TheRealTube.payload.response.MessageResponse;
 import TheRealTubeProject.TheRealTube.repositories.RoleRepository;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
 import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
@@ -74,12 +73,12 @@ public class AuthController {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Nazwa użytkownika jest już w użyciu!"));
+                    .body("Error: Nazwa użytkownika jest już w użyciu!");
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email aktualnie jest w użyciu!"));
+                    .body("Error: Email aktualnie jest w użyciu!");
         }
         // Tworzenie nowego użytkownika
         User user = new User(signUpRequest.getUsername(),

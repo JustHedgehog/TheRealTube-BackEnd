@@ -1,6 +1,6 @@
 package TheRealTubeProject.TheRealTube.controllers;
 
-import TheRealTubeProject.TheRealTube.models.ReturnMessage;
+import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
