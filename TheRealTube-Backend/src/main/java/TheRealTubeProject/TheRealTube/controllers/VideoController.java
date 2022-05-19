@@ -1,5 +1,6 @@
 package TheRealTubeProject.TheRealTube.controllers;
 
+import TheRealTubeProject.TheRealTube.models.ReturnMessage;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
@@ -22,44 +23,48 @@ public class VideoController {
     }
 
 
-    @PostMapping(value = "userIdPlaceholder",headers=("content-type=multipart/*"))
+    @PostMapping(value = "userIdPlaceholder", headers = ("content-type=multipart/*"))
     @PreAuthorize("hasRole('User')")
-    ResponseEntity<String> addVideo(@RequestPart(value = "file") MultipartFile file){
-        videoService.uploadVideo(file);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file) {
+        Video video = videoService.uploadVideo(file);
+        return new ResponseEntity<>(
+                video,
+                HttpStatus.CREATED);
     }
 
     @DeleteMapping("{videoId}")
     @PreAuthorize("hasRole('User')")
-    ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Long videoId){
+    ResponseEntity<ReturnMessage> deleteVideo(@PathVariable("videoId") Long videoId) {
 
         videoService.deleteVideo(videoId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ReturnMessage(videoId, "video deleted"),
+                HttpStatus.OK);
     }
 
     @GetMapping
-    ResponseEntity<List<Video>> getAllVideos(){
+    ResponseEntity<List<Video>> getAllVideos() {
 
         List<Video> videoList = videoService.getAllVideos();
 
-        return new ResponseEntity<>(videoList ,HttpStatus.OK);
+        return new ResponseEntity<>(videoList, HttpStatus.OK);
     }
 
     @GetMapping("{videoId}")
-    ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId){
+    ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId) {
 
         Video video = videoService.getVideo(videoId);
 
-        return new ResponseEntity<>(video ,HttpStatus.OK);
+        return new ResponseEntity<>(video, HttpStatus.OK);
     }
 
     @GetMapping("userIdPlaceholder/video")
-    ResponseEntity<String> getAllVideosRelatedToUser(@PathVariable("videoId") Long videoId){
+    ResponseEntity<List<Video>> getAllVideosRelatedToUser(@PathVariable("userId") Long userId) {
 
-        //  List<Video> videoList = videoService.getVideosRelatedToUser();
+          List<Video> videoList = videoService.getVideosRelatedToUser(userId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(videoList,HttpStatus.OK);
     }
 
 }

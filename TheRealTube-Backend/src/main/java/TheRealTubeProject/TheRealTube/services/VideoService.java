@@ -6,11 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface VideoService {
-    String uploadVideo(MultipartFile file);
+    Video uploadVideo(MultipartFile file);
 
     Video getVideo(Long videoId);
 
     List<Video> getAllVideos();
 
     void deleteVideo(Long videoId);
+
+    List<Video> getVideosRelatedToUser(Long userId);
 }

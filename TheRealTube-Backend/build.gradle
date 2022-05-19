@@ -28,8 +28,13 @@ sourceSets {
 			srcDir "src/test/java/"
 		}
 	}
+
 }
 
+
+test {
+	useJUnitPlatform()
+}
 
 
 dependencies {
@@ -40,6 +45,8 @@ dependencies {
 	implementation 'commons-io:commons-io:2.11.0'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.7'
+	implementation "com.google.code.gson:gson:2.9.0"
+
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -47,6 +54,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
