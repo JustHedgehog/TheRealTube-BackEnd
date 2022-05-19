@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.net.URL;
 
 @Entity
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Video {
 
     @Id

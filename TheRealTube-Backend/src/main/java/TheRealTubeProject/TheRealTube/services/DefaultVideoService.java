@@ -34,7 +34,7 @@ public class DefaultVideoService implements VideoService {
         newVideo.setFileurl(objectStorageService.getFileUrl(objectKey));
         newVideo.setObjectKey(objectKey);
         videoRepository.save(newVideo);
-       return newVideo;
+        return newVideo;
     }
 
     @Override
@@ -55,9 +55,8 @@ public class DefaultVideoService implements VideoService {
     @Override
     public List<Video> getVideosRelatedToUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get().getVideos();
-        }
-        else return Collections.emptyList();
+        } else return Collections.emptyList();
     }
 }

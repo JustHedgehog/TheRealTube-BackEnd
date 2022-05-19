@@ -62,9 +62,9 @@ public class VideoController {
     @GetMapping("userIdPlaceholder/video")
     ResponseEntity<List<Video>> getAllVideosRelatedToUser(@PathVariable("userId") Long userId) {
 
-          List<Video> videoList = videoService.getVideosRelatedToUser(userId);
+        List<Video> videoList = videoService.getVideosRelatedToUser(userId);
 
-        return new ResponseEntity<>(videoList,HttpStatus.OK);
+        return new ResponseEntity<>(videoList, HttpStatus.OK);
     }
 
 }

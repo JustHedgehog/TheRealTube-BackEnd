@@ -57,20 +57,21 @@ class AuthControllerTest {
     private static final String userPassword = "HappyUserPassword$&$";
 
     @BeforeEach
-    public void init(){
-        authController = new AuthController(jwtUtils,encoder,
+    public void init() {
+        authController = new AuthController(jwtUtils, encoder,
                 roleRepository,
                 mockUserRepo,
                 authenticationManager
-                );
+        );
     }
 
-    @Test void create_account_and_login_succesfully()   {
+    @Test
+    void create_account_and_login_succesfully() {
         User user = registerUser();
         loginUser(user);
     }
 
-    private User registerUser()  {
+    private User registerUser() {
         User user = new User();
         user.setUsername(userName);
         user.setPassword(userPassword);
@@ -84,22 +85,22 @@ class AuthControllerTest {
         signupRequest.setEmail(user.getEmail());
         signupRequest.setRole(Set.of("user"));
 
-        ResponseEntity actual =  authController.registerUser(signupRequest);
+        ResponseEntity actual = authController.registerUser(signupRequest);
 
         ResponseEntity expected = new ResponseEntity<>("Zarejestrowano użytkownika!", HttpStatus.CREATED);
 
-        Assertions.assertEquals(expected,actual);
+        Assertions.assertEquals(expected, actual);
 
         return user;
     }
 
-    private void loginUser(User user){
+    private void loginUser(User user) {
         LoginRequest lr = new LoginRequest();
         lr.setUsername(user.getUsername());
         lr.setPassword(user.getPassword());
 
-       ResponseEntity response = authController.authenticateUser(lr);
-       Assertions.assertEquals(HttpStatus.OK,response.getStatusCode());
+        ResponseEntity response = authController.authenticateUser(lr);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 }

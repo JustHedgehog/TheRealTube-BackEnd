@@ -41,7 +41,7 @@ public class AuthController {
                           PasswordEncoder passwordEncoder,
                           RoleRepository roleRepository,
                           UserRepository userRepository,
-                          AuthenticationManager authenticationManager){
+                          AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -68,6 +68,7 @@ public class AuthController {
 
 
     }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {

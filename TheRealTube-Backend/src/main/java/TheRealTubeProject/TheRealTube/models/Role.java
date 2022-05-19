@@ -3,6 +3,7 @@ package TheRealTubeProject.TheRealTube.models;
 import lombok.Data;
 
 import javax.persistence.*;
+
 @Data
 @Entity
 @Table(name = "roles")
@@ -16,6 +17,7 @@ public class Role {
 
     public Role() {
     }
+
     public Role(ERole name) {
         this.name = name;
     }

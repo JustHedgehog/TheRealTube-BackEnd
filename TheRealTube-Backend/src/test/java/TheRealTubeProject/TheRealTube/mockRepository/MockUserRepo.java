@@ -73,11 +73,10 @@ public class MockUserRepo implements UserRepository {
 
     @Override
     public <S extends User> S save(S entity) {
-        if(entity.getId() == null)
-        {
+        if (entity.getId() == null) {
             entity.setId(new Random().nextLong());
         }
-        userMapRepo.put(entity.getId(),entity);
+        userMapRepo.put(entity.getId(), entity);
 
         return entity;
     }

@@ -19,7 +19,7 @@ import java.util.function.Function;
 @TestComponent
 public class MockVideoRepo implements VideoRepository {
 
-    public ConcurrentHashMap<Long,Video> videoMapRepo = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<Long, Video> videoMapRepo = new ConcurrentHashMap<>();
 
     @Override
     public List<Video> findAll() {
@@ -72,11 +72,10 @@ public class MockVideoRepo implements VideoRepository {
 
     @Override
     public <S extends Video> S save(S entity) {
-        if(entity.getId() == null)
-        {
+        if (entity.getId() == null) {
             entity.setId(Long.valueOf(UUID.randomUUID().toString()));
         }
-        videoMapRepo.put(entity.getId(),entity);
+        videoMapRepo.put(entity.getId(), entity);
 
         return entity;
     }
