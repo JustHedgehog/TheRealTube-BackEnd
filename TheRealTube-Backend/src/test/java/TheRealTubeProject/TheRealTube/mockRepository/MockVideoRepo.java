@@ -170,4 +170,9 @@ public class MockVideoRepo implements VideoRepository {
     public <S extends Video, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
+
+    @Override
+    public List<Video> findVideosByNameRegex() {
+        return null;
+    }
 }

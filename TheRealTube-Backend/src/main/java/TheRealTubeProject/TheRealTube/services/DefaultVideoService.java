@@ -48,6 +48,11 @@ public class DefaultVideoService implements VideoService {
     }
 
     @Override
+    public List<Video> getAllVideosByName(String nameRegex) {
+        return videoRepository.findVideosByNameRegex();
+    }
+
+    @Override
     public void deleteVideo(Long videoId) {
         objectStorageService.deleteVideo(videoId);
     }
