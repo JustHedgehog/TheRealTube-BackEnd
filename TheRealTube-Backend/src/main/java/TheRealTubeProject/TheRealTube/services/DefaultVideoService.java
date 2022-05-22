@@ -49,7 +49,7 @@ public class DefaultVideoService implements VideoService {
 
     @Override
     public List<Video> getAllVideosByName(String nameRegex) {
-        return videoRepository.findVideosByNameRegex();
+        return videoRepository.findVideosByNameReg(nameRegex);
     }
 
     @Override

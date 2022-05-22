@@ -172,8 +172,7 @@ public class MockVideoRepo implements VideoRepository {
     }
 
     @Override
-    public List<Video> findVideosByNameRegex() {
-        return null;
+    public List<Video> findVideosByNameReg(String regexName) {
+        return videoMapRepo.values().stream().toList();
     }
-
 }

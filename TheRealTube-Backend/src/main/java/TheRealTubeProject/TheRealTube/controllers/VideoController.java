@@ -51,8 +51,8 @@ public class VideoController {
         return new ResponseEntity<>(videoList, HttpStatus.OK);
     }
 
-    @GetMapping
-    ResponseEntity<List<Video>> getAllVideosByName(String regexName) {
+    @GetMapping("name/{regexName}")
+    ResponseEntity<List<Video>> getAllVideosByName(@PathVariable("regexName") String regexName) {
 
         List<Video> videoList = videoService.getAllVideosByName(regexName);
 
