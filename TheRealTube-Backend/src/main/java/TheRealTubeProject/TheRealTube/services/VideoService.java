@@ -17,4 +17,5 @@ public interface VideoService {
     List<Video> getVideosRelatedToUser(Long userId);
 
     List<Video> getAllVideosByName(String nameRegex);
+
 }
