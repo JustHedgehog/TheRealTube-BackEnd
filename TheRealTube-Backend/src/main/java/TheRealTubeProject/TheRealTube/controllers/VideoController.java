@@ -24,7 +24,7 @@ public class VideoController {
 
 
     @PostMapping(value = "userIdPlaceholder", headers = ("content-type=multipart/*"))
-    @PreAuthorize("hasRole('User')")
+    @PreAuthorize("hasRole('USER')")
     ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file) {
         Video video = videoService.uploadVideo(file);
         return new ResponseEntity<>(
@@ -33,7 +33,7 @@ public class VideoController {
     }
 
     @DeleteMapping("{videoId}")
-    @PreAuthorize("hasRole('User')")
+    @PreAuthorize("hasRole('USER')")
     ResponseEntity<ReturnMessage> deleteVideo(@PathVariable("videoId") Long videoId) {
 
         videoService.deleteVideo(videoId);
