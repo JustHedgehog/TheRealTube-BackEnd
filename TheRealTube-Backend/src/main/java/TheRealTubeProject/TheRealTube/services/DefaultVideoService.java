@@ -27,9 +27,16 @@ public class DefaultVideoService implements VideoService {
     }
 
     @Override
-    public Video uploadVideo(MultipartFile file) {
+    public Video uploadVideo(MultipartFile file, String name, Long userId) {
+
         Video newVideo = new Video();
-        newVideo.setName(file.getOriginalFilename());
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            newVideo.setUser(user.get());
+        }else {
+            return null;
+        }
+        newVideo.setName(name);
         String objectKey = objectStorageService.uploadToObjectStorage(file);
         newVideo.setFileurl(objectStorageService.getFileUrl(objectKey));
         newVideo.setObjectKey(objectKey);
