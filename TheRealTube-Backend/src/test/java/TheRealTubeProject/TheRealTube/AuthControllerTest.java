@@ -31,6 +31,7 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 @ComponentScan(basePackages = "TheRealTubeProject.TheRealTube")
 @AutoConfigureMockMvc
+//@EnableJpaRepositories("TTheRealTubeProject.TheRealTube.repositories")
 class AuthControllerTest {
 
     @Autowired

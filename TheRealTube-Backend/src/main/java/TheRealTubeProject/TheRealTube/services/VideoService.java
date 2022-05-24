@@ -15,4 +15,7 @@ public interface VideoService {
     void deleteVideo(Long videoId);
 
     List<Video> getVideosRelatedToUser(Long userId);
+
+    List<Video> getAllVideosByName(String nameRegex);
+
 }
