@@ -62,6 +62,7 @@ public class DefaultVideoService implements VideoService {
     @Override
     public void deleteVideo(Long videoId) {
         objectStorageService.deleteVideo(videoId);
+        videoRepository.deleteById(videoId);
     }
 
     @Override
