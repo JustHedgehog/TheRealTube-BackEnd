@@ -1,7 +1,7 @@
 package TheRealTubeProject.TheRealTube.controllers;
 
-import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.models.Video;
+import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ public class VideoController {
     }
 
 
-    @PostMapping(path="upload/{userId}", headers = ("content-type=multipart/*"))
+    @PostMapping(path = "upload/{userId}", headers = ("content-type=multipart/*"))
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file,@RequestPart(value = "name") String name, @PathVariable("userId") Long userId) {
-        Video video = videoService.uploadVideo(file, name,userId);
+    public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "name") String name, @PathVariable("userId") Long userId) {
+        Video video = videoService.uploadVideo(file, name, userId);
         return new ResponseEntity<>(
                 video,
                 HttpStatus.CREATED);

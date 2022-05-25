@@ -60,21 +60,21 @@ public class VideoControllerTest {
                 objectStorageServiceMock,
                 mockVideoRepo,
                 mockUserRepo
-                );
+        );
 
         videoController = new VideoController(videoService);
 
     }
 
     @AfterEach
-    public void clear(){
+    public void clear() {
         mockUserRepo.clean();
         mockVideoRepo.clean();
     }
 
 
     @Test
-    void add_video_return_created(){
+    void add_video_return_created() {
         addUser(1L);
         MockMultipartFile file
                 = new MockMultipartFile(
@@ -83,9 +83,9 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        ResponseEntity actual = videoController.addVideo(file,"real_video",1L);
+        ResponseEntity actual = videoController.addVideo(file, "real_video", 1L);
 
-        Video added  = ((Video) actual.getBody());
+        Video added = ((Video) actual.getBody());
         ResponseEntity expected = new ResponseEntity<>(
                 added,
                 HttpStatus.CREATED);
@@ -106,11 +106,11 @@ public class VideoControllerTest {
                 "video file content for sure".getBytes()
         );
 
-        URL ur1 =new URL("http", "example.com", "/pages/page1.html");
+        URL ur1 = new URL("http", "example.com", "/pages/page1.html");
         when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
         when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur1);
 
-        videoController.addVideo(file,"real_video",1L);
+        videoController.addVideo(file, "real_video", 1L);
 
         ResponseEntity actual = videoController.deleteVideo(1L);
 
@@ -121,12 +121,13 @@ public class VideoControllerTest {
         Assertions.assertEquals(expected, actual);
 
     }
+
     @Test
     void get_all_videos_return_video_list_successfully() throws MalformedURLException {
 
         addUser(1L);
         addUser(2L);
-        URL ur2 =new URL("http", "example.com", "/pages/page1.html");
+        URL ur2 = new URL("http", "example.com", "/pages/page1.html");
         when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
         when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur2);
 
@@ -137,7 +138,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        videoController.addVideo(file,"real_video",1L);
+        videoController.addVideo(file, "real_video", 1L);
         MockMultipartFile file2
                 = new MockMultipartFile(
                 "file2",
@@ -145,20 +146,20 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure!".getBytes()
         );
-        videoController.addVideo(file2,"real_video2",2L);
+        videoController.addVideo(file2, "real_video2", 2L);
 
-        List<Video> videoList =videoController.getAllVideos().getBody();
+        List<Video> videoList = videoController.getAllVideos().getBody();
 
         ResponseEntity actual = videoController.getAllVideos();
 
-        ResponseEntity expected =new ResponseEntity<>(videoList, HttpStatus.OK);
+        ResponseEntity expected = new ResponseEntity<>(videoList, HttpStatus.OK);
 
         Assertions.assertEquals(expected, actual);
 
     }
 
     @Test
-    void get_all_videos_by_name_return_one_successfully(){
+    void get_all_videos_by_name_return_one_successfully() {
         addUser(1L);
         MockMultipartFile file
                 = new MockMultipartFile(
@@ -167,10 +168,10 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-         videoController.addVideo(file,"real_video",1L);
+        videoController.addVideo(file, "real_video", 1L);
 
         ResponseEntity actual = videoController.getAllVideosByName("this_is_video");
-        List<Video> added  = ((List<Video>) actual.getBody());
+        List<Video> added = ((List<Video>) actual.getBody());
 
         ResponseEntity expected = new ResponseEntity<>(
                 added,
@@ -185,7 +186,7 @@ public class VideoControllerTest {
 
         addUser(1L);
         addUser(2L);
-        URL ur2 =new URL("http", "example.com", "/pages/page1.html");
+        URL ur2 = new URL("http", "example.com", "/pages/page1.html");
         when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
         when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur2);
 
@@ -196,7 +197,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        videoController.addVideo(file,"real_video",1L);
+        videoController.addVideo(file, "real_video", 1L);
 
         MockMultipartFile file2
                 = new MockMultipartFile(
@@ -205,17 +206,17 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure!".getBytes()
         );
-        Video addedVideo = videoController.addVideo(file2,"real_video2",2L).getBody();
+        Video addedVideo = videoController.addVideo(file2, "real_video2", 2L).getBody();
 
         ResponseEntity actual = videoController.getAllVideosRelatedToUser(2L);
 
-        ResponseEntity expected =new ResponseEntity<>(List.of(addedVideo), HttpStatus.OK);
+        ResponseEntity expected = new ResponseEntity<>(List.of(addedVideo), HttpStatus.OK);
 
         Assertions.assertEquals(expected, actual);
 
     }
 
-    private User addUser(Long id){
+    private User addUser(Long id) {
         User user = new User();
         user.setId(id);
         user.setUsername("temp");
