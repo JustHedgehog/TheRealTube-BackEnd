@@ -89,7 +89,7 @@ public class MockUserRepo implements UserRepository {
 
     @Override
     public Optional<User> findById(Long aLong) {
-        return Optional.empty();
+        return Optional.of(userMapRepo.get(aLong));
     }
 
     @Override
@@ -188,5 +188,9 @@ public class MockUserRepo implements UserRepository {
     public Boolean existsByEmail(String email) {
         return userMapRepo.values().stream().anyMatch(user -> user.getEmail().equals(email));
 
+    }
+
+    public void clean() {
+        userMapRepo.clear();
     }
 }

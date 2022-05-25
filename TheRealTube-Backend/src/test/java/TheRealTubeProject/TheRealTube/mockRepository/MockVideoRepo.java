@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -73,7 +73,7 @@ public class MockVideoRepo implements VideoRepository {
     @Override
     public <S extends Video> S save(S entity) {
         if (entity.getId() == null) {
-            entity.setId(Long.valueOf(UUID.randomUUID().toString()));
+            entity.setId(new Random().nextLong());
         }
         videoMapRepo.put(entity.getId(), entity);
 
@@ -88,7 +88,7 @@ public class MockVideoRepo implements VideoRepository {
 
     @Override
     public Optional<Video> findById(Long aLong) {
-        return Optional.empty();
+        return Optional.ofNullable(videoMapRepo.get(aLong));
     }
 
     @Override
@@ -174,5 +174,9 @@ public class MockVideoRepo implements VideoRepository {
     @Override
     public List<Video> findVideosByNameReg(String regexName) {
         return videoMapRepo.values().stream().toList();
+    }
+
+    public void clean() {
+        videoMapRepo.clear();
     }
 }

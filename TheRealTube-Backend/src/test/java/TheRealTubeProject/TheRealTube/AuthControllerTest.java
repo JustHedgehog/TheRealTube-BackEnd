@@ -31,7 +31,6 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 @ComponentScan(basePackages = "TheRealTubeProject.TheRealTube")
 @AutoConfigureMockMvc
-//@EnableJpaRepositories("TTheRealTubeProject.TheRealTube.repositories")
 class AuthControllerTest {
 
     @Autowired
@@ -73,6 +72,7 @@ class AuthControllerTest {
     }
 
     private User registerUser() {
+        //given
         User user = new User();
         user.setUsername(userName);
         user.setPassword(userPassword);
@@ -86,7 +86,10 @@ class AuthControllerTest {
         signupRequest.setEmail(user.getEmail());
         signupRequest.setRole(Set.of("user"));
 
+        //when
         ResponseEntity actual = authController.registerUser(signupRequest);
+
+        //then
 
         ResponseEntity expected = new ResponseEntity<>("Zarejestrowano użytkownika!", HttpStatus.CREATED);
 
@@ -96,11 +99,13 @@ class AuthControllerTest {
     }
 
     private void loginUser(User user) {
+        //given
         LoginRequest lr = new LoginRequest();
         lr.setUsername(user.getUsername());
         lr.setPassword(user.getPassword());
-
+        //when
         ResponseEntity response = authController.authenticateUser(lr);
+        //then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }

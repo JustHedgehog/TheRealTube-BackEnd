@@ -6,6 +6,7 @@ import TheRealTubeProject.TheRealTube.repositories.UserRepository;
 import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,8 @@ public class DefaultVideoService implements VideoService {
     private final UserRepository userRepository;
 
     public DefaultVideoService(ObjectStorageService objectStorageService,
-                               VideoRepository videoRepository, UserRepository userRepository) {
+                               VideoRepository videoRepository,
+                               UserRepository userRepository) {
         this.objectStorageService = objectStorageService;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
@@ -31,16 +33,17 @@ public class DefaultVideoService implements VideoService {
 
         Video newVideo = new Video();
         Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            newVideo.setUser(user.get());
-        }else {
-            return null;
+        if (!user.isPresent()) {
+            throw new ServerErrorException("user does not exists");
         }
+        newVideo.setUser(user.get());
+        user.get().getVideos().add(newVideo);
         newVideo.setName(name);
         String objectKey = objectStorageService.uploadToObjectStorage(file);
         newVideo.setFileurl(objectStorageService.getFileUrl(objectKey));
         newVideo.setObjectKey(objectKey);
         videoRepository.save(newVideo);
+        userRepository.save(user.get());
         return newVideo;
     }
 

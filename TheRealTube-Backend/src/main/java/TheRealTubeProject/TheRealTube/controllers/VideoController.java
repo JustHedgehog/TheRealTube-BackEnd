@@ -26,7 +26,7 @@ public class VideoController {
 
     @PostMapping(path="upload/{userId}", headers = ("content-type=multipart/*"))
     @PreAuthorize("hasRole('USER')")
-    ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file,@RequestPart(value = "name") String name, @PathVariable("userId") Long userId) {
+    public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file,@RequestPart(value = "name") String name, @PathVariable("userId") Long userId) {
         Video video = videoService.uploadVideo(file, name,userId);
         return new ResponseEntity<>(
                 video,
@@ -36,7 +36,7 @@ public class VideoController {
     @Transactional
     @DeleteMapping("{videoId}")
     @PreAuthorize("hasRole('USER')")
-    ResponseEntity<ReturnMessage> deleteVideo(@PathVariable("videoId") Long videoId) {
+    public ResponseEntity<ReturnMessage> deleteVideo(@PathVariable("videoId") Long videoId) {
 
         videoService.deleteVideo(videoId);
 
@@ -46,7 +46,7 @@ public class VideoController {
     }
 
     @GetMapping
-    ResponseEntity<List<Video>> getAllVideos() {
+    public ResponseEntity<List<Video>> getAllVideos() {
 
         List<Video> videoList = videoService.getAllVideos();
 
@@ -54,7 +54,7 @@ public class VideoController {
     }
 
     @GetMapping("name/{regexName}")
-    ResponseEntity<List<Video>> getAllVideosByName(@PathVariable("regexName") String regexName) {
+    public ResponseEntity<List<Video>> getAllVideosByName(@PathVariable("regexName") String regexName) {
 
         List<Video> videoList = videoService.getAllVideosByName(regexName);
 
@@ -63,15 +63,15 @@ public class VideoController {
 
 
     @GetMapping("{videoId}")
-    ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId) {
+    public ResponseEntity<Video> getVideo(@PathVariable("videoId") Long videoId) {
 
         Video video = videoService.getVideo(videoId);
 
         return new ResponseEntity<>(video, HttpStatus.OK);
     }
 
-    @GetMapping("userIdPlaceholder/video")
-    ResponseEntity<List<Video>> getAllVideosRelatedToUser(@PathVariable("userId") Long userId) {
+    @GetMapping("{userId}/video")
+    public ResponseEntity<List<Video>> getAllVideosRelatedToUser(@PathVariable("userId") Long userId) {
 
         List<Video> videoList = videoService.getVideosRelatedToUser(userId);
 

@@ -33,6 +33,13 @@ public class Video {
         this.user = user;
     }
 
+    public Video(Long id, String name, URL fileurl, String objectKey) {
+        this.id = id;
+        this.name = name;
+        this.fileurl = fileurl;
+        this.objectKey = objectKey;
+    }
+
     public String getObjectKey() {
         return objectKey;
     }
