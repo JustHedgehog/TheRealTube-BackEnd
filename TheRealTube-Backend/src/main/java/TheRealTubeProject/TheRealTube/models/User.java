@@ -1,5 +1,6 @@
 package TheRealTubeProject.TheRealTube.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany
+    @JsonBackReference
     private List<Video> videos = new ArrayList<>();
 
     public User() {
