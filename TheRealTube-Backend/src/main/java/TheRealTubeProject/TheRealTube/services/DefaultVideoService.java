@@ -39,6 +39,7 @@ public class DefaultVideoService implements VideoService {
         newVideo.setUser(user.get());
         user.get().getVideos().add(newVideo);
         newVideo.setName(name);
+        newVideo.setDescription(description);
         String objectKey = objectStorageService.uploadToObjectStorage(file);
         newVideo.setFileurl(objectStorageService.getFileUrl(objectKey));
         newVideo.setObjectKey(objectKey);
