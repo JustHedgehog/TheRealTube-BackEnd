@@ -2,10 +2,12 @@ package TheRealTubeProject.TheRealTube.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.net.URL;
 
+@Data
 @Entity
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Video {
@@ -20,6 +22,7 @@ public class Video {
 
     private String objectKey;
 
+    private String description;
     @ManyToOne
     @JsonManagedReference
     User user;
@@ -27,58 +30,14 @@ public class Video {
     public Video() {
     }
 
-    public Video(Long id, String name, URL fileurl, String objectKey, User user) {
+    public Video(Long id, String name, URL fileurl, String objectKey, String description, User user) {
         this.id = id;
         this.name = name;
         this.fileurl = fileurl;
         this.objectKey = objectKey;
+        this.description = description;
         this.user = user;
     }
 
-    public Video(Long id, String name, URL fileurl, String objectKey) {
-        this.id = id;
-        this.name = name;
-        this.fileurl = fileurl;
-        this.objectKey = objectKey;
-    }
 
-    public String getObjectKey() {
-        return objectKey;
-    }
-
-    public void setObjectKey(String objectKey) {
-        this.objectKey = objectKey;
-    }
-
-    public URL getFileurl() {
-        return fileurl;
-    }
-
-    public void setFileurl(URL fileurl) {
-        this.fileurl = fileurl;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

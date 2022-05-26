@@ -29,7 +29,7 @@ public class DefaultVideoService implements VideoService {
     }
 
     @Override
-    public Video uploadVideo(MultipartFile file, String name, Long userId) {
+    public Video uploadVideo(MultipartFile file, String name,String description ,Long userId) {
 
         Video newVideo = new Video();
         Optional<User> user = userRepository.findById(userId);

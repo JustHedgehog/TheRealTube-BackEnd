@@ -83,7 +83,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        ResponseEntity actual = videoController.addVideo(file, "real_video", 1L);
+        ResponseEntity actual = videoController.addVideo(file, "real_video", "Testowy opis",1L);
 
         Video added = ((Video) actual.getBody());
         ResponseEntity expected = new ResponseEntity<>(
@@ -110,7 +110,7 @@ public class VideoControllerTest {
         when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
         when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur1);
 
-        videoController.addVideo(file, "real_video", 1L);
+        videoController.addVideo(file, "real_video", "Testowe video",1L);
 
         ResponseEntity actual = videoController.deleteVideo(1L);
 
@@ -138,7 +138,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        videoController.addVideo(file, "real_video", 1L);
+        videoController.addVideo(file, "real_video", "Testowe video",1L);
         MockMultipartFile file2
                 = new MockMultipartFile(
                 "file2",
@@ -146,7 +146,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure!".getBytes()
         );
-        videoController.addVideo(file2, "real_video2", 2L);
+        videoController.addVideo(file2, "real_video2","Testowe video" ,2L);
 
         List<Video> videoList = videoController.getAllVideos().getBody();
 
@@ -168,7 +168,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        videoController.addVideo(file, "real_video", 1L);
+        videoController.addVideo(file, "real_video", "Testowe wideo",1L);
 
         ResponseEntity actual = videoController.getAllVideosByName("this_is_video");
         List<Video> added = ((List<Video>) actual.getBody());
@@ -197,7 +197,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
-        videoController.addVideo(file, "real_video", 1L);
+        videoController.addVideo(file, "real_video", "Testowe video",1L);
 
         MockMultipartFile file2
                 = new MockMultipartFile(
@@ -206,7 +206,7 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure!".getBytes()
         );
-        Video addedVideo = videoController.addVideo(file2, "real_video2", 2L).getBody();
+        Video addedVideo = videoController.addVideo(file2, "real_video2", "Testowe video",2L).getBody();
 
         ResponseEntity actual = videoController.getAllVideosRelatedToUser(2L);
 

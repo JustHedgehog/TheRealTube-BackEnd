@@ -26,8 +26,11 @@ public class VideoController {
 
     @PostMapping(path = "upload/{userId}", headers = ("content-type=multipart/*"))
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "name") String name, @PathVariable("userId") Long userId) {
-        Video video = videoService.uploadVideo(file, name, userId);
+    public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file,
+                                          @RequestPart(value = "name") String name,
+                                          @RequestPart(value="description") String description,
+                                          @PathVariable("userId") Long userId) {
+        Video video = videoService.uploadVideo(file, name, description, userId);
         return new ResponseEntity<>(
                 video,
                 HttpStatus.CREATED);
