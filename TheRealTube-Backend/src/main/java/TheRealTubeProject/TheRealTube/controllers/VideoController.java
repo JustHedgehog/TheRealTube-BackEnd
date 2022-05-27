@@ -27,7 +27,7 @@ public class VideoController {
 
 
     @PostMapping(path = "upload/{userId}", headers = ("content-type=multipart/*"))
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Video> addVideo(@RequestPart(value = "file") MultipartFile file,
                                           @RequestPart(value = "name") String name,
                                           @RequestPart(value="description") String description,
@@ -40,7 +40,7 @@ public class VideoController {
 
     @Transactional
     @DeleteMapping("/{videoId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> deleteVideo(@PathVariable("videoId") Long videoId) {
 
 

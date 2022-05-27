@@ -1,5 +1,7 @@
 package TheRealTubeProject.TheRealTube.services;
 
+import TheRealTubeProject.TheRealTube.models.ERole;
+import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultVideoService implements VideoService {
@@ -76,9 +79,12 @@ public class DefaultVideoService implements VideoService {
         videoRepository.findById(videoId).ifPresent(video -> {
 
             UserDetailsImpl userDetails =(UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
             userRepository.findById(video.getUser().getId()).ifPresent(user -> {
-                if(!user.getUsername().equals(userDetails.getUsername())){
+                if(!user.getUsername().equals(userDetails.getUsername()) && roles.contains("ROLE_USER")) {
                     throw new ServerErrorException("Nie tykoj jak nie twoje dziodzie jeden");
                 }
             });
