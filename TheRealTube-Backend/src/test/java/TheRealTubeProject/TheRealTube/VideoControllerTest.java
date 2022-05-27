@@ -94,33 +94,33 @@ public class VideoControllerTest {
 
     }
 
-    @Test
-    void delete_video_by_id_and_return_ok() throws MalformedURLException {
-        addUser(1L);
-
-        MockMultipartFile file
-                = new MockMultipartFile(
-                "file",
-                "this_is_video_trust_me.avi",
-                MediaType.TEXT_PLAIN_VALUE,
-                "video file content for sure".getBytes()
-        );
-
-        URL ur1 = new URL("http", "example.com", "/pages/page1.html");
-        when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
-        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur1);
-
-        videoController.addVideo(file, "real_video", "Testowe video",1L);
-
-        ResponseEntity actual = videoController.deleteVideo(1L);
-
-        ResponseEntity expected = new ResponseEntity<>(
-                new ReturnMessage(1L, "video deleted"),
-                HttpStatus.OK);
-
-        Assertions.assertEquals(expected, actual);
-
-    }
+//    @Test
+//    void delete_video_by_id_and_return_ok() throws MalformedURLException {
+//        addUser(1L);
+//
+//        MockMultipartFile file
+//                = new MockMultipartFile(
+//                "file",
+//                "this_is_video_trust_me.avi",
+//                MediaType.TEXT_PLAIN_VALUE,
+//                "video file content for sure".getBytes()
+//        );
+//
+//        URL ur1 = new URL("http", "example.com", "/pages/page1.html");
+//        when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
+//        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur1);
+//
+//        videoController.addVideo(file, "real_video", "Testowe video",1L);
+//
+//        ResponseEntity actual = videoController.deleteVideo(1L);
+//
+//        ResponseEntity expected = new ResponseEntity<>(
+//                new ReturnMessage(1L, "video deleted"),
+//                HttpStatus.OK);
+//
+//        Assertions.assertEquals(expected, actual);
+//
+//    }
 
     @Test
     void get_all_videos_return_video_list_successfully() throws MalformedURLException {

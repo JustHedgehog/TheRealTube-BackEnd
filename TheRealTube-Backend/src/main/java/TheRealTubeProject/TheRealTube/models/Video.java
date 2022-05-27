@@ -23,6 +23,7 @@ public class Video {
     private String objectKey;
 
     private String description;
+
     @ManyToOne
     @JsonManagedReference
     User user;
