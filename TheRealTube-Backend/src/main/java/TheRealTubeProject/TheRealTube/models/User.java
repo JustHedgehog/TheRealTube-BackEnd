@@ -30,9 +30,14 @@ public class User {
     @Size(max = 50)
     @Email
     private String email;
+
+    @Size(max=999)
+    private String avatarUrl;
+
     @NotBlank
     @Size(max = 120, min = 6)
     private String password;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
