@@ -35,9 +35,9 @@ public class UserController {
     }
 
     @PostMapping(path = "avatar/{userId}", headers = ("content-type=multipart/*"))
-    public ResponseEntity<User> changeUsersAvatar(@RequestPart(value = "file") MultipartFile file,
-                                                  @PathVariable("userId") Long userId) {
-
-        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+        public ResponseEntity<User> changeUsersAvatar(@RequestPart(value = "file") MultipartFile file,
+                                                      @PathVariable("userId") Long userId) {
+        userService.changeUsersAvatar(file, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
