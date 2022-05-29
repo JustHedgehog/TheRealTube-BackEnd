@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,9 @@ public class User {
     private String email;
 
     @Size(max=999)
-    private String avatarUrl;
+    private URL avatarUrl;
+
+    private String avatarObjectKey;
 
     @NotBlank
     @Size(max = 120, min = 6)

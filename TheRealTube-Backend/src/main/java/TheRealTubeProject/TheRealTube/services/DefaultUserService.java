@@ -31,7 +31,15 @@ public class DefaultUserService implements UserService {
 
     @Override
     public void changeUsersAvatar(MultipartFile file, Long id) {
+        userRepository.findById(id).ifPresent(user -> {
+            if(user.getAvatarUrl()!=null){
+                objectStorageService.deleteObject(user.getAvatarObjectKey());
+            }
+        });
         String objectStorageKey = objectStorageService.uploadToObjectStorage(file);
-        userRepository.findById(id).ifPresent(user -> user.setAvatarUrl(objectStorageKey));
+        userRepository.findById(id).ifPresent(user ->{
+            user.setAvatarObjectKey(objectStorageKey);
+            user.setAvatarUrl(objectStorageService.getFileUrl(objectStorageKey));
+            });
     }
 }

@@ -83,4 +83,11 @@ public class DefaultObjectStorageService implements ObjectStorageService {
         });
     }
 
+    @Override
+    public void deleteObject(String objectKey) {
+        if (client.doesObjectExist("data-dx", objectKey)) {
+            client.deleteObject("data-dx", objectKey);
+        }
+    }
+
 }
