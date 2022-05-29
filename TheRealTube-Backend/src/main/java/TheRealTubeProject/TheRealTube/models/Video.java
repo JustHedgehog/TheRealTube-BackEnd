@@ -6,6 +6,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Entity
@@ -24,6 +26,8 @@ public class Video {
 
     private String description;
 
+    @OneToMany
+    Map<Long, VideoLike> likes = new HashMap<>();
     @ManyToOne
     @JsonManagedReference
     User user;

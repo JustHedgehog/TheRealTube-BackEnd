@@ -1,10 +1,9 @@
 package TheRealTubeProject.TheRealTube.services;
 
 import TheRealTubeProject.TheRealTube.models.Video;
+import TheRealTubeProject.TheRealTube.payload.response.VideoLikesStats;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface VideoService {
@@ -20,4 +19,7 @@ public interface VideoService {
 
     List<Video> getAllVideosByName(String nameRegex);
 
+    void likeDislikeVideo(Long videoId,Long userId,boolean like);
+
+    VideoLikesStats getVideosLikesStats(Long videoId);
 }

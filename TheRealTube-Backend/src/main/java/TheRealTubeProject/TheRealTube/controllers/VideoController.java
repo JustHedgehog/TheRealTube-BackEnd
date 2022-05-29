@@ -2,6 +2,7 @@ package TheRealTubeProject.TheRealTube.controllers;
 
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
+import TheRealTubeProject.TheRealTube.payload.response.VideoLikesStats;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -37,6 +36,18 @@ public class VideoController {
                 video,
                 HttpStatus.CREATED);
     }
+    @PostMapping(path ="/judge/{videoId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<Void> LikeDislikeVideo(
+            @RequestParam(value = "userId") String userId,
+            @PathVariable("videoId") Long videoId,
+            @RequestParam(value = "like") Boolean like) {
+
+        videoService.likeDislikeVideo(videoId, Long.valueOf(userId),like);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @Transactional
     @DeleteMapping("/{videoId}")
@@ -57,6 +68,15 @@ public class VideoController {
         List<Video> videoList = videoService.getAllVideos();
 
         return new ResponseEntity<>(videoList, HttpStatus.OK);
+    }
+
+    @GetMapping("likes/{videoId}")
+    public ResponseEntity<VideoLikesStats> getVideosLikes(@PathVariable("videoId") Long videoId) {
+
+
+        return new ResponseEntity<>(
+                videoService.getVideosLikesStats(videoId),
+                HttpStatus.OK);
     }
 
     @GetMapping("name/{regexName}")

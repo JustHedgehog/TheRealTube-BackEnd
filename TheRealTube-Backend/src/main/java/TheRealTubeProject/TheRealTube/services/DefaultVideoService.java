@@ -1,26 +1,20 @@
 package TheRealTubeProject.TheRealTube.services;
 
-import TheRealTubeProject.TheRealTube.models.ERole;
-import TheRealTubeProject.TheRealTube.models.Role;
+import TheRealTubeProject.TheRealTube.models.VideoLike;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
+import TheRealTubeProject.TheRealTube.payload.response.VideoLikesStats;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
+import TheRealTubeProject.TheRealTube.repositories.VideoLikeRepository;
 import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
 
 import TheRealTubeProject.TheRealTube.security.services.UserDetailsImpl;
 
-import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
-import TheRealTubeProject.TheRealTube.security.services.UserDetailsImpl;
-import io.jsonwebtoken.Jwt;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ServerErrorException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,12 +28,16 @@ public class DefaultVideoService implements VideoService {
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
 
+    private final VideoLikeRepository videoLikeRepository;
+
     public DefaultVideoService(ObjectStorageService objectStorageService,
                                VideoRepository videoRepository,
-                               UserRepository userRepository) {
+                               UserRepository userRepository,
+                               VideoLikeRepository videoLikeRepository) {
         this.objectStorageService = objectStorageService;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.videoLikeRepository = videoLikeRepository;
     }
 
     @Override
@@ -75,6 +73,40 @@ public class DefaultVideoService implements VideoService {
     @Override
     public List<Video> getAllVideosByName(String nameRegex) {
         return videoRepository.findVideosByNameReg(nameRegex);
+    }
+
+    @Override
+    public void likeDislikeVideo(Long videoId,Long userId,boolean like) {
+
+        videoRepository.findById(videoId).ifPresent(video -> {
+
+                if(video.getLikes().keySet().stream().noneMatch(userIdsFromSet -> userId.equals(userIdsFromSet))){
+                    VideoLike newLike = new VideoLike();
+                    newLike.setLiked(like);
+                    video.getLikes().put(userId,newLike);
+                    videoLikeRepository.save(newLike);
+                }else {
+                    VideoLike existingLike = video.getLikes().get(userId);
+                    existingLike.setLiked(like);
+                    videoLikeRepository.save(existingLike);
+
+                }
+                videoRepository.save(video);
+        });
+    }
+
+    @Override
+    public VideoLikesStats getVideosLikesStats(Long videoId) {
+        Video video = videoRepository.getById(videoId);
+        return new VideoLikesStats()
+                .withLikes(
+                        video.getLikes().values()
+                                .stream()
+                                .filter(videoLike -> videoLike.getLiked()).count())
+                .withDislikes(
+                        video.getLikes().values()
+                                .stream()
+                                .filter(videoLike -> !videoLike.getLiked()).count());
     }
 
     @Override

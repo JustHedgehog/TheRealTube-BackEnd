@@ -2,6 +2,7 @@ package TheRealTubeProject.TheRealTube;
 
 import TheRealTubeProject.TheRealTube.controllers.VideoController;
 import TheRealTubeProject.TheRealTube.mockRepository.MockUserRepo;
+import TheRealTubeProject.TheRealTube.mockRepository.MockVideoLikeRepository;
 import TheRealTubeProject.TheRealTube.mockRepository.MockVideoRepo;
 import TheRealTubeProject.TheRealTube.models.ERole;
 import TheRealTubeProject.TheRealTube.models.Role;
@@ -47,6 +48,9 @@ public class VideoControllerTest {
     @Autowired
     MockUserRepo mockUserRepo;
 
+    @Autowired
+    MockVideoLikeRepository mockVideoLikeRepository;
+
     ObjectStorageService objectStorageServiceMock;
     VideoController videoController;
     VideoService videoService;
@@ -59,8 +63,8 @@ public class VideoControllerTest {
         videoService = new DefaultVideoService(
                 objectStorageServiceMock,
                 mockVideoRepo,
-                mockUserRepo
-        );
+                mockUserRepo,
+                mockVideoLikeRepository);
 
         videoController = new VideoController(videoService);
 
@@ -93,7 +97,27 @@ public class VideoControllerTest {
         Assertions.assertEquals(expected, actual);
 
     }
+    @Test
+    void like_video_return_Ok() {
+        addUser(1L);
+        MockMultipartFile file
+                = new MockMultipartFile(
+                "file",
+                "this_is_video_trust_me.avi",
+                MediaType.TEXT_PLAIN_VALUE,
+                "video file content for sure".getBytes()
+        );
+        ResponseEntity actual = videoController.addVideo(file, "real_video", "Testowy opis",1L);
+        Video added = ((Video) actual.getBody());
+        videoController.LikeDislikeVideo("1",added.getId(),true);
 
+        ResponseEntity expected = new ResponseEntity<>(
+                added,
+                HttpStatus.CREATED);
+
+        Assertions.assertEquals(expected, actual);
+
+    }
     @Test
     void delete_video_by_id_and_return_ok() throws MalformedURLException {
         addUser(1L);

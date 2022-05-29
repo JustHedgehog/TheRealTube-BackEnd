@@ -23,18 +23,18 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
 
-        List<User> videoList = userService.getAllUsers();
+        List<User> userList = userService.getAllUsers();
 
-        return new ResponseEntity<>(videoList, HttpStatus.OK);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") Long userId) {
 
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
-    @PostMapping(path = "avatar/{userId}", headers = ("content-type=multipart/*"))
+    @PostMapping(path = "/avatar/{userId}", headers = ("content-type=multipart/*"))
         public ResponseEntity<User> changeUsersAvatar(@RequestPart(value = "file") MultipartFile file,
                                                       @PathVariable("userId") Long userId) {
         userService.changeUsersAvatar(file, userId);
