@@ -32,7 +32,6 @@ public class User {
     @Email
     private String email;
 
-    @Size(max=999)
     private URL avatarUrl;
 
     private String avatarObjectKey;
