@@ -40,6 +40,8 @@ public class DefaultUserService implements UserService {
         userRepository.findById(id).ifPresent(user ->{
             user.setAvatarObjectKey(objectStorageKey);
             user.setAvatarUrl(objectStorageService.getFileUrl(objectStorageKey));
+            userRepository.save(user);
             });
+
     }
 }
