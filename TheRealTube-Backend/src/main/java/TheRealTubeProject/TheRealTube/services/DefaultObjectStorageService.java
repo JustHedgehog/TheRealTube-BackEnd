@@ -1,5 +1,6 @@
 package TheRealTubeProject.TheRealTube.services;
 
+import TheRealTubeProject.TheRealTube.exceptions.ServerErrorException;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
 import com.ibm.cloud.objectstorage.AmazonClientException;
@@ -52,7 +53,7 @@ public class DefaultObjectStorageService implements ObjectStorageService {
             upload.waitForCompletion();
         } catch (AmazonClientException | InterruptedException | IOException e) {
             log.error(e.getMessage());
-            throw new AmazonClientException(e.getMessage());
+            throw new ServerErrorException(e.getMessage());
         }
         transferManager.shutdownNow(false);
         return objectKey;
