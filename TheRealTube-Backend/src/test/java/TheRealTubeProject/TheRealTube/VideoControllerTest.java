@@ -82,7 +82,7 @@ public class VideoControllerTest {
 
 
     @Test
-    void add_video_return_created() {
+    void add_video_return_created() throws MalformedURLException {
         addUser(1L);
         MockMultipartFile file
                 = new MockMultipartFile(
@@ -91,6 +91,9 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
+        URL url = new URL("http", "example.com", "/pages/page1.html");
+        when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
+        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(url);
         ResponseEntity actual = videoController.addVideo(file, "real_video", "Testowy opis",1L);
 
         Video added = ((Video) actual.getBody());
@@ -102,7 +105,7 @@ public class VideoControllerTest {
 
     }
     @Test
-    void like_video_return_Ok() {
+    void like_video_return_Ok() throws MalformedURLException {
         addUser(1L);
         MockMultipartFile file
                 = new MockMultipartFile(
@@ -111,6 +114,9 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
+        URL url = new URL("http", "example.com", "/pages/page1.html");
+        when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
+        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(url);
         ResponseEntity actual = videoController.addVideo(file, "real_video", "Testowy opis",1L);
         Video added = ((Video) actual.getBody());
         videoController.LikeDislikeVideo("1",added.getId(),true);
@@ -134,9 +140,9 @@ public class VideoControllerTest {
                 "video file content for sure".getBytes()
         );
 
-        URL ur1 = new URL("http", "example.com", "/pages/page1.html");
+        URL url = new URL("http", "example.com", "/pages/page1.html");
         when(objectStorageServiceMock.uploadToObjectStorage(any())).thenReturn("objectKey");
-        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(ur1);
+        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(url);
 
         videoController.addVideo(file, "real_video", "Testowe video",1L);
 
@@ -187,7 +193,7 @@ public class VideoControllerTest {
     }
 
     @Test
-    void get_all_videos_by_name_return_one_successfully() {
+    void get_all_videos_by_name_return_one_successfully() throws MalformedURLException {
         addUser(1L);
         MockMultipartFile file
                 = new MockMultipartFile(
@@ -196,6 +202,8 @@ public class VideoControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "video file content for sure".getBytes()
         );
+        URL url = new URL("http", "example.com", "/pages/page1.html");
+        when(objectStorageServiceMock.getFileUrl(any())).thenReturn(url);
         videoController.addVideo(file, "real_video", "Testowe wideo",1L);
 
         ResponseEntity actual = videoController.getAllVideosByName("this_is_video");
