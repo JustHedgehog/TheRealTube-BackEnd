@@ -11,12 +11,15 @@ import java.util.List;
 @Service
 public class DefaultUserService implements UserService {
 
-    UserRepository userRepository;
-    ObjectStorageService objectStorageService;
+    private final UserRepository userRepository;
+    private final ObjectStorageService objectStorageService;
 
-    public DefaultUserService(UserRepository userRepository, ObjectStorageService objectStorageService) {
+    private final AuthService authService;
+
+    public DefaultUserService(UserRepository userRepository, ObjectStorageService objectStorageService, AuthService authService) {
         this.userRepository = userRepository;
         this.objectStorageService = objectStorageService;
+        this.authService = authService;
     }
 
     @Override
@@ -33,6 +36,8 @@ public class DefaultUserService implements UserService {
 
     @Override
     public void changeUsersAvatar(MultipartFile file, Long id) {
+        authService.isHeHasPermissions(id);
+
         userRepository.findById(id).ifPresent(user -> {
             if(user.getAvatarUrl()!=null){
                 objectStorageService.deleteObject(user.getAvatarObjectKey());
@@ -49,7 +54,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User updateUser(Long id, User user) {
-
+        authService.isHeHasPermissions(id);
         User actualUser = getUserById(id);
         actualUser.setAvatarUrl(user.getAvatarUrl());
         actualUser.setEmail(user.getEmail());

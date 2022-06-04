@@ -27,9 +27,12 @@ public class DefaultAuthService implements AuthService{
                 .collect(Collectors.toList());
 
         userRepository.findById(userId).ifPresent(user -> {
-            if(!user.getEmail().equals(userDetails.getEmail()) && roles.contains("ROLE_USER")) {
-                throw new NoPermissionException();
+            if(!(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_MOD"))){
+                if(!user.getEmail().equals(userDetails.getEmail()) && roles.contains("ROLE_USER")) {
+                    throw new NoPermissionException();
+                }
             }
+
         });
         return true;
     }
