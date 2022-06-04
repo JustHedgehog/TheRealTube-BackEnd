@@ -9,6 +9,7 @@ import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
+import TheRealTubeProject.TheRealTube.services.AuthService;
 import TheRealTubeProject.TheRealTube.services.DefaultVideoService;
 import TheRealTubeProject.TheRealTube.services.ObjectStorageService;
 import TheRealTubeProject.TheRealTube.services.VideoService;
@@ -51,6 +52,8 @@ public class VideoControllerTest {
     @Autowired
     MockVideoLikeRepository mockVideoLikeRepository;
 
+    @Autowired
+    AuthService authService;
     ObjectStorageService objectStorageServiceMock;
     VideoController videoController;
     VideoService videoService;
@@ -64,7 +67,8 @@ public class VideoControllerTest {
                 objectStorageServiceMock,
                 mockVideoRepo,
                 mockUserRepo,
-                mockVideoLikeRepository);
+                mockVideoLikeRepository,
+                authService);
 
         videoController = new VideoController(videoService);
 

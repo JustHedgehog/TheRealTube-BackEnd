@@ -1,6 +1,5 @@
 package TheRealTubeProject.TheRealTube.services;
 
-import TheRealTubeProject.TheRealTube.exceptions.NoPermissionException;
 import TheRealTubeProject.TheRealTube.exceptions.UserNotFoundException;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
@@ -9,15 +8,12 @@ import TheRealTubeProject.TheRealTube.payload.response.VideoLikesStats;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
 import TheRealTubeProject.TheRealTube.repositories.VideoLikeRepository;
 import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
-import TheRealTubeProject.TheRealTube.security.services.UserDetailsImpl;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DefaultVideoService implements VideoService {
@@ -29,14 +25,18 @@ public class DefaultVideoService implements VideoService {
 
     private final VideoLikeRepository videoLikeRepository;
 
+    private final AuthService authService;
+
     public DefaultVideoService(ObjectStorageService objectStorageService,
                                VideoRepository videoRepository,
                                UserRepository userRepository,
-                               VideoLikeRepository videoLikeRepository) {
+                               VideoLikeRepository videoLikeRepository,
+                               AuthService authService) {
         this.objectStorageService = objectStorageService;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
         this.videoLikeRepository = videoLikeRepository;
+        this.authService = authService;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class DefaultVideoService implements VideoService {
 
         videoRepository.findById(videoId).ifPresent(video -> {
 
-                if(video.getLikes().keySet().stream().noneMatch(userIdsFromSet -> userId.equals(userIdsFromSet))){
+                if(video.getLikes().keySet().stream().noneMatch(userId::equals)){
                     VideoLike newLike = new VideoLike();
                     newLike.setLiked(like);
                     video.getLikes().put(userId,newLike);
@@ -113,16 +113,7 @@ public class DefaultVideoService implements VideoService {
 
         videoRepository.findById(videoId).ifPresent(video -> {
 
-            UserDetailsImpl userDetails =(UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            List<String> roles = userDetails.getAuthorities().stream()
-                    .map(item -> item.getAuthority())
-                    .collect(Collectors.toList());
-
-            userRepository.findById(video.getUser().getId()).ifPresent(user -> {
-                if(!user.getUsername().equals(userDetails.getUsername()) && roles.contains("ROLE_USER")) {
-                    throw new NoPermissionException();
-                }
-            });
+            authService.isHeHasPermissions(video.getUser().getId());
 
             userRepository.findById(video.getUser().getId()).ifPresent(user -> {
                 user.getVideos().remove(video);
