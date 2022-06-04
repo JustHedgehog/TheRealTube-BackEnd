@@ -1,17 +1,13 @@
 package TheRealTubeProject.TheRealTube.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @Entity
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Video {
 
     @Id
@@ -20,7 +16,7 @@ public class Video {
 
     private String name;
 
-    private URL fileurl;
+    private String fileurl;
 
     private String objectKey;
 
@@ -29,13 +25,12 @@ public class Video {
     @OneToMany
     Map<Long, VideoLike> likes = new HashMap<>();
     @ManyToOne
-    @JsonManagedReference
     User user;
 
     public Video() {
     }
 
-    public Video(Long id, String name, URL fileurl, String objectKey, String description, User user) {
+    public Video(Long id, String name, String fileurl, String objectKey, String description, User user) {
         this.id = id;
         this.name = name;
         this.fileurl = fileurl;

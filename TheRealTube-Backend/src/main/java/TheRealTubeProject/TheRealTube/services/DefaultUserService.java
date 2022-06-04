@@ -29,6 +29,8 @@ public class DefaultUserService implements UserService {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
+
+
     @Override
     public void changeUsersAvatar(MultipartFile file, Long id) {
         userRepository.findById(id).ifPresent(user -> {
@@ -39,9 +41,23 @@ public class DefaultUserService implements UserService {
         String objectStorageKey = objectStorageService.uploadToObjectStorage(file);
         userRepository.findById(id).ifPresent(user ->{
             user.setAvatarObjectKey(objectStorageKey);
-            user.setAvatarUrl(objectStorageService.getFileUrl(objectStorageKey));
+            user.setAvatarUrl(objectStorageService.getFileUrl(objectStorageKey).toString());
             userRepository.save(user);
             });
 
+    }
+
+    @Override
+    public User updateUser(Long id, User user) {
+
+        User actualUser = getUserById(id);
+        actualUser.setAvatarUrl(user.getAvatarUrl());
+        actualUser.setEmail(user.getEmail());
+        actualUser.setAvatarObjectKey(user.getAvatarObjectKey());
+        actualUser.setPassword(user.getPassword());
+        actualUser.setRoles(user.getRoles());
+        actualUser.setUsername(user.getUsername());
+        userRepository.save(actualUser);
+        return actualUser;
     }
 }

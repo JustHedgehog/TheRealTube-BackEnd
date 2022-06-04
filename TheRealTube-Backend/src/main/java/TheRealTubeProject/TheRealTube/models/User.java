@@ -1,13 +1,12 @@
 package TheRealTubeProject.TheRealTube.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,7 @@ public class User {
     @Email
     private String email;
 
-    private URL avatarUrl;
+    private String avatarUrl;
 
     private String avatarObjectKey;
 
@@ -47,7 +46,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonIgnoreProperties(value={ "videos" }, allowGetters=true)
     private List<Video> videos = new ArrayList<>();
 
     public User() {

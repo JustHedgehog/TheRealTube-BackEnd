@@ -11,4 +11,6 @@ public interface UserService {
     User getUserById(Long id);
     void changeUsersAvatar(MultipartFile file, Long id);
 
+    User updateUser(Long id, User user);
+
 }
