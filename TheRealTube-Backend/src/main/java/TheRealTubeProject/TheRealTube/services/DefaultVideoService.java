@@ -61,7 +61,7 @@ public class DefaultVideoService implements VideoService {
 
     @Override
     public Video getVideo(Long videoId) {
-        return videoRepository.getById(videoId);
+        return videoRepository.findById(videoId).get();
     }
 
     @Override

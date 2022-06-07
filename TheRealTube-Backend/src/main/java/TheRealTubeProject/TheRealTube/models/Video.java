@@ -1,7 +1,5 @@
 package TheRealTubeProject.TheRealTube.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,9 +8,7 @@ import java.util.Map;
 
 @Data
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+
 public class Video {
 
     @Id
@@ -29,8 +25,8 @@ public class Video {
 
     @OneToMany
     Map<Long, VideoLike> likes = new HashMap<>();
-    @ManyToOne
 
+    @ManyToOne
     User user;
 
     public Video() {
@@ -44,6 +40,5 @@ public class Video {
         this.description = description;
         this.user = user;
     }
-
 
 }

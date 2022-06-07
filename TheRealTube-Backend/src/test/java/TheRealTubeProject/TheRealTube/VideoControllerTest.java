@@ -9,10 +9,7 @@ import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
-import TheRealTubeProject.TheRealTube.services.AuthService;
-import TheRealTubeProject.TheRealTube.services.DefaultVideoService;
-import TheRealTubeProject.TheRealTube.services.ObjectStorageService;
-import TheRealTubeProject.TheRealTube.services.VideoService;
+import TheRealTubeProject.TheRealTube.services.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +54,7 @@ public class VideoControllerTest {
     ObjectStorageService objectStorageServiceMock;
     VideoController videoController;
     VideoService videoService;
+    UserService userService;
 
     @BeforeEach
     public void init() {
@@ -70,7 +68,7 @@ public class VideoControllerTest {
                 mockVideoLikeRepository,
                 authService);
 
-        videoController = new VideoController(videoService);
+        videoController = new VideoController(videoService, userService );
 
     }
 

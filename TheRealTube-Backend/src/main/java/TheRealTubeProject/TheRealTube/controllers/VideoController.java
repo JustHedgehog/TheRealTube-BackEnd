@@ -3,6 +3,7 @@ package TheRealTubeProject.TheRealTube.controllers;
 import TheRealTubeProject.TheRealTube.models.Video;
 import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.payload.response.VideoLikesStats;
+import TheRealTubeProject.TheRealTube.services.UserService;
 import TheRealTubeProject.TheRealTube.services.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ import java.util.List;
 public class VideoController {
 
     private final VideoService videoService;
+    private final UserService userService;
 
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService, UserService userService) {
         this.videoService = videoService;
+        this.userService = userService;
     }
 
 
@@ -32,6 +35,7 @@ public class VideoController {
                                           @RequestPart(value="description") String description,
                                           @PathVariable("userId") Long userId) {
         Video video = videoService.uploadVideo(file, name, description, userId);
+
         return new ResponseEntity<>(
                 video,
                 HttpStatus.CREATED);

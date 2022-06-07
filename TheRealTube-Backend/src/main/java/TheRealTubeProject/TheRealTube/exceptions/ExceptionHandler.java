@@ -26,7 +26,11 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
             error.setStatusCode(404);
             return buildResponseEntity(error, HttpStatus.NOT_FOUND);
 
-        }else {
+        }if( ex instanceof TokenRefreshException){
+            error.setStatusCode(401);
+            return buildResponseEntity(error, HttpStatus.NOT_FOUND);
+        }
+        else {
             error.setStatusCode(500);
             return buildResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -94,6 +98,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
         return buildResponseEntity(error, status);
     }
+
 
 
 }

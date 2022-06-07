@@ -1,14 +1,20 @@
 package TheRealTubeProject.TheRealTube.controllers;
 
+import TheRealTubeProject.TheRealTube.exceptions.TokenRefreshException;
 import TheRealTubeProject.TheRealTube.models.ERole;
+import TheRealTubeProject.TheRealTube.models.RefreshToken;
 import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
+import TheRealTubeProject.TheRealTube.payload.request.LogOutRequest;
 import TheRealTubeProject.TheRealTube.payload.request.LoginRequest;
 import TheRealTubeProject.TheRealTube.payload.request.SignupRequest;
+import TheRealTubeProject.TheRealTube.payload.request.TokenRefreshRequest;
 import TheRealTubeProject.TheRealTube.payload.response.JwtResponse;
+import TheRealTubeProject.TheRealTube.payload.response.TokenRefreshResponse;
 import TheRealTubeProject.TheRealTube.repositories.RoleRepository;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
 import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
+import TheRealTubeProject.TheRealTube.security.services.RefreshTokenService;
 import TheRealTubeProject.TheRealTube.security.services.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +41,20 @@ public class AuthController {
     RoleRepository roleRepository;
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
+    RefreshTokenService refreshTokenService;
 
     public AuthController(JwtUtils jwtUtils,
                           PasswordEncoder passwordEncoder,
                           RoleRepository roleRepository,
                           UserRepository userRepository,
-                          AuthenticationManager authenticationManager) {
+                          AuthenticationManager authenticationManager,
+                          RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/signin")
@@ -53,19 +62,35 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtils.generateJwtToken(userDetails);
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         return new ResponseEntity<>(new JwtResponse(jwt,
+                refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles), HttpStatus.OK);
 
 
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException());
     }
 
     @PostMapping("/signup")
@@ -113,5 +138,11 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
         return new ResponseEntity<>("Zarejestrowano użytkownika!", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) {
+        refreshTokenService.deleteByUserId(logOutRequest.getUserId());
+        return ResponseEntity.ok("Wylogowany");
     }
 }

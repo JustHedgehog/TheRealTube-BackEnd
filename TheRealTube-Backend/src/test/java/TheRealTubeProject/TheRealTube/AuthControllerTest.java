@@ -8,8 +8,10 @@ import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.payload.request.LoginRequest;
 import TheRealTubeProject.TheRealTube.payload.request.SignupRequest;
+import TheRealTubeProject.TheRealTube.repositories.RefreshTokenRepository;
 import TheRealTubeProject.TheRealTube.repositories.RoleRepository;
 import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
+import TheRealTubeProject.TheRealTube.security.services.RefreshTokenService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,8 @@ class AuthControllerTest {
     PasswordEncoder encoder;
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    RefreshTokenService refreshTokenService;
 
     @Autowired
     MockUserRepo mockUserRepo;
@@ -61,7 +65,8 @@ class AuthControllerTest {
         authController = new AuthController(jwtUtils, encoder,
                 roleRepository,
                 mockUserRepo,
-                authenticationManager
+                authenticationManager,
+                refreshTokenService
         );
     }
 
