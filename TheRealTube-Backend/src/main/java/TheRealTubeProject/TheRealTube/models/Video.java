@@ -1,5 +1,6 @@
 package TheRealTubeProject.TheRealTube.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +9,6 @@ import java.util.Map;
 
 @Data
 @Entity
-
 public class Video {
 
     @Id
@@ -27,6 +27,7 @@ public class Video {
     Map<Long, VideoLike> likes = new HashMap<>();
 
     @ManyToOne
+    @JsonManagedReference
     User user;
 
     public Video() {

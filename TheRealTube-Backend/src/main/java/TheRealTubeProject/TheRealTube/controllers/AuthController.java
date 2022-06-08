@@ -75,7 +75,9 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles), HttpStatus.OK);
+                roles,
+                userDetails.getAvatarUrl()
+                ), HttpStatus.OK);
 
 
     }
