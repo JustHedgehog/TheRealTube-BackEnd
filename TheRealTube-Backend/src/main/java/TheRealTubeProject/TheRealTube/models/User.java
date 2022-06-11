@@ -50,6 +50,10 @@ public class User {
     @JsonBackReference
     private List<Video> videos = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Comment> comments = new ArrayList<>();
+
     public User() {
     }
 
