@@ -1,6 +1,7 @@
 package TheRealTubeProject.TheRealTube.models;
 
 import TheRealTubeProject.TheRealTube.services.CommentService;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
@@ -21,12 +22,17 @@ public class Comment {
     @JsonManagedReference
     private User user;
 
+    @ManyToOne
+    @JsonBackReference
+    private Video video;
+
     public Comment() {
     }
 
-    public Comment(String description, User user) {
+    public Comment(String description, User user, Video video) {
         this.description = description;
         this.user = user;
+        this.video = video;
     }
 
 }

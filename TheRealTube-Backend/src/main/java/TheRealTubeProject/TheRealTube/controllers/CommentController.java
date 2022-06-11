@@ -3,15 +3,12 @@ package TheRealTubeProject.TheRealTube.controllers;
 
 import TheRealTubeProject.TheRealTube.models.Comment;
 import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
-import TheRealTubeProject.TheRealTube.repositories.CommentRepository;
-import TheRealTubeProject.TheRealTube.repositories.UserRepository;
 import TheRealTubeProject.TheRealTube.services.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,6 +26,13 @@ public class CommentController {
     public ResponseEntity<List<Comment>> getAllComments(){
         List<Comment> temp = commentService.getAllComments();
         return new ResponseEntity<>(temp, HttpStatus.OK);
+    }
+
+    @GetMapping("/video/{videoId}")
+    public ResponseEntity<List<Comment>> getAllCommentsRelatedToVideo(@PathVariable(name = "videoId") Long videoId){
+
+        return new ResponseEntity<>(commentService.getAllCommentsRelatedToVideo(videoId), HttpStatus.OK);
+
     }
 
     @GetMapping("/{commentId}")
@@ -49,11 +53,12 @@ public class CommentController {
         return new ResponseEntity<>(new ReturnMessage(commentId, "Comment deleted"), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping("/{videoId}/{userId}")
     public ResponseEntity<Comment> addComment(@PathVariable(name = "userId")Long userId,
+                                              @PathVariable(name = "videoId")Long videoId,
                                               @RequestPart(name="description") String description){
 
-        Comment comment = commentService.addComment(description, userId);
+        Comment comment = commentService.addComment(description, userId, videoId);
 
         return new ResponseEntity<>(comment,HttpStatus.CREATED);
     }
