@@ -84,7 +84,7 @@ public class DefaultCommentService implements CommentService{
     public void deleteCommentById(Long commentId) {
 
         commentRepository.findById(commentId).ifPresent(comment -> {
-//            authService.isHeHasPermissions(comment.getUser().getId());
+            authService.isHeHasPermissions(comment.getUser().getId());
 
             userRepository.findById(comment.getUser().getId()).ifPresent(user -> {
 

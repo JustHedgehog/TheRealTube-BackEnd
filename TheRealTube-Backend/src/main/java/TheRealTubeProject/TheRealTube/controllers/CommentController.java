@@ -6,6 +6,7 @@ import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.services.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,7 @@ public class CommentController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Comment>> getAllComments(){
         List<Comment> temp = commentService.getAllComments();
         return new ResponseEntity<>(temp, HttpStatus.OK);
@@ -36,17 +38,20 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public  ResponseEntity<Comment> getComment (@PathVariable(name = "commentId") Long commentId){
         return new ResponseEntity<>(commentService.getCommentById(commentId), HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Comment>> getAllCommentsByUser(@PathVariable(name = "userId") Long userId){
         return new ResponseEntity<>(commentService.getAllCommentsByUser(userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{commentId}")
     @Transactional
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ReturnMessage> deleteComment(@PathVariable(name = "commentId") Long commentId){
 
         commentService.deleteCommentById(commentId);
@@ -54,6 +59,7 @@ public class CommentController {
     }
 
     @PostMapping("/{videoId}/{userId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Comment> addComment(@PathVariable(name = "userId")Long userId,
                                               @PathVariable(name = "videoId")Long videoId,
                                               @RequestPart(name="description") String description){
