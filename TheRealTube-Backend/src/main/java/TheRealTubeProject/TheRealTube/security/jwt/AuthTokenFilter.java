@@ -1,6 +1,8 @@
 package TheRealTubeProject.TheRealTube.security.jwt;
 
+import TheRealTubeProject.TheRealTube.exceptions.TokenRefreshException;
 import TheRealTubeProject.TheRealTube.security.services.UserDetailsServiceImpl;
+import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception e) {
+        } catch (JwtException | TokenRefreshException e) {
             logger.error("Cannot set user authentication: {}", e);
+            throw e;
         }
         filterChain.doFilter(request, response);
     }

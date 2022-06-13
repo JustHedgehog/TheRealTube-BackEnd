@@ -40,7 +40,7 @@ public class VideoController {
                 video,
                 HttpStatus.CREATED);
     }
-    @PostMapping(path ="/judge/{videoId}")
+    @PostMapping(path ="/likes/{videoId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Void> LikeDislikeVideo(
             @RequestParam(value = "userId") String userId,

@@ -8,7 +8,6 @@ import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.payload.request.LoginRequest;
 import TheRealTubeProject.TheRealTube.payload.request.SignupRequest;
-import TheRealTubeProject.TheRealTube.repositories.RefreshTokenRepository;
 import TheRealTubeProject.TheRealTube.repositories.RoleRepository;
 import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
 import TheRealTubeProject.TheRealTube.security.services.RefreshTokenService;
