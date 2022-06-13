@@ -1,7 +1,9 @@
 package TheRealTubeProject.TheRealTube.controllers;
 
 import TheRealTubeProject.TheRealTube.models.User;
+import TheRealTubeProject.TheRealTube.payload.response.ReturnMessage;
 import TheRealTubeProject.TheRealTube.services.UserService;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,4 +50,14 @@ public class UserController {
         userService.changeUsersAvatar(file, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ReturnMessage> deleteUser(@PathVariable(name = "userId") Long userId){
+
+        userService.deleteUser(userId);
+
+        return new ResponseEntity<>(new ReturnMessage(userId, "Uzytkownik został usunięty"), HttpStatus.OK);
+    }
+
 }
