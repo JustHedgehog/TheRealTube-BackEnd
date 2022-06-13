@@ -6,9 +6,7 @@ import TheRealTubeProject.TheRealTube.mockRepository.MockVideoRepo;
 import TheRealTubeProject.TheRealTube.models.ERole;
 import TheRealTubeProject.TheRealTube.models.Role;
 import TheRealTubeProject.TheRealTube.models.User;
-import TheRealTubeProject.TheRealTube.payload.request.LoginRequest;
 import TheRealTubeProject.TheRealTube.payload.request.SignupRequest;
-import TheRealTubeProject.TheRealTube.repositories.RefreshTokenRepository;
 import TheRealTubeProject.TheRealTube.repositories.RoleRepository;
 import TheRealTubeProject.TheRealTube.security.jwt.JwtUtils;
 import TheRealTubeProject.TheRealTube.security.services.RefreshTokenService;
@@ -57,12 +55,13 @@ class AuthControllerTest {
 
 
     private static final String userName = "HappyUserTest";
-    private static final String userEmail = "HappyUser@Test.com";
+    private static final String userEmail = "happyuser@test.com";
     private static final String userPassword = "HappyUserPassword$&$";
 
     @BeforeEach
     public void init() {
-        authController = new AuthController(jwtUtils, encoder,
+        authController = new AuthController(jwtUtils,
+                encoder,
                 roleRepository,
                 mockUserRepo,
                 authenticationManager,
@@ -70,13 +69,10 @@ class AuthControllerTest {
         );
     }
 
-    @Test
-    void create_account_and_login_succesfully() {
-        User user = registerUser();
-        loginUser(user);
-    }
 
-    private User registerUser() {
+
+    @Test
+    void registerUser() {
         //given
         User user = new User();
         user.setUsername(userName);
@@ -99,19 +95,6 @@ class AuthControllerTest {
         ResponseEntity expected = new ResponseEntity<>("Zarejestrowano użytkownika!", HttpStatus.CREATED);
 
         Assertions.assertEquals(expected, actual);
-
-        return user;
     }
 
-    private void loginUser(User user) {
-        //given
-        LoginRequest lr = new LoginRequest();
-        lr.setUsername(user.getUsername());
-        lr.setPassword(user.getPassword());
-        //when
-        ResponseEntity response = authController.authenticateUser(lr);
-        //then
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-    }
 }
