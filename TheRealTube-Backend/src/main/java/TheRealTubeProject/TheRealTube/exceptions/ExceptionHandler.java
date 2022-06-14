@@ -26,7 +26,9 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
             error.setStatusCode(404);
             return buildResponseEntity(error, HttpStatus.NOT_FOUND);
 
-        }else if( ex instanceof TokenRefreshException || ex instanceof  NoPermissionException){
+        }else if( ex instanceof TokenRefreshException || ex instanceof  NoPermissionException
+        || ex instanceof BadCredentialsException){
+
             error.setStatusCode(401);
             return buildResponseEntity(error, HttpStatus.UNAUTHORIZED);
         }
