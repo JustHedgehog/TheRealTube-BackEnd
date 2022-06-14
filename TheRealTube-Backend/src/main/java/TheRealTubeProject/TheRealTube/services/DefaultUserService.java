@@ -88,6 +88,18 @@ public class DefaultUserService implements UserService {
                 });
                 videoRepository.delete(video);
             });
+
+            commentService.getAllCommentsByUser(userId).forEach(comment -> {
+
+                videoService.getAllVideos().forEach(video -> {
+
+                    if(video.getComments().contains(comment))
+                    {
+                        video.getComments().remove(comment);
+                        commentRepository.delete(comment);
+                    }
+                });
+            });
             refreshTokenService.deleteByUserId(userId);
             userRepository.delete(user);
 
