@@ -3,7 +3,9 @@ package TheRealTubeProject.TheRealTube.services;
 import TheRealTubeProject.TheRealTube.exceptions.UserNotFoundException;
 import TheRealTubeProject.TheRealTube.models.User;
 import TheRealTubeProject.TheRealTube.models.Video;
+import TheRealTubeProject.TheRealTube.repositories.CommentRepository;
 import TheRealTubeProject.TheRealTube.repositories.UserRepository;
+import TheRealTubeProject.TheRealTube.repositories.VideoRepository;
 import TheRealTubeProject.TheRealTube.security.services.RefreshTokenService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,8 @@ import java.util.List;
 public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final VideoRepository videoRepository;
+    private final CommentRepository commentRepository;
     private final ObjectStorageService objectStorageService;
     private final CommentService commentService;
     private final VideoService videoService;
@@ -27,13 +31,17 @@ public class DefaultUserService implements UserService {
                               AuthService authService,
                               CommentService commentService,
                               VideoService videoService,
-                              RefreshTokenService refreshTokenService) {
+                              RefreshTokenService refreshTokenService,
+                              VideoRepository videoRepository,
+                              CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.objectStorageService = objectStorageService;
         this.authService = authService;
         this.commentService = commentService;
         this.videoService = videoService;
         this.refreshTokenService = refreshTokenService;
+        this.videoRepository = videoRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -68,8 +76,21 @@ public class DefaultUserService implements UserService {
     @Transactional
     public void deleteUser(Long userId) {
         userRepository.findById(userId).ifPresent(user -> {
+
+            videoService.getVideosRelatedToUser(userId).forEach(video -> {
+
+                commentService.getAllCommentsRelatedToVideo(video.getId()).forEach(comment -> {
+
+                    userRepository.findById(comment.getUser().getId()).ifPresent(user1 -> {
+                        user1.getComments().remove(comment);
+                        commentRepository.delete(comment);
+                    });
+                });
+                videoRepository.delete(video);
+            });
             refreshTokenService.deleteByUserId(userId);
             userRepository.delete(user);
+
         });
     }
 
