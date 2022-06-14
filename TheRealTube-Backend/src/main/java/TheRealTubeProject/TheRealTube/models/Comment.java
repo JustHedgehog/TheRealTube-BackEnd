@@ -4,6 +4,8 @@ import TheRealTubeProject.TheRealTube.services.CommentService;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -18,11 +20,11 @@ public class Comment {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonManagedReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonBackReference
     private Video video;
 
