@@ -131,10 +131,9 @@ public class DefaultVideoService implements VideoService {
                     userRepository.findById(comment.getUser().getId()).ifPresent(user1 -> {
                         user1.getComments().remove(comment);
                         commentRepository.delete(comment);
-                        user.getVideos().remove(video);
-
                     });
                 });
+                user.getVideos().remove(video);
                 videoRepository.deleteById(videoId);
                 objectStorageService.deleteVideo(videoId);
             });
